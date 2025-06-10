@@ -1,0 +1,146 @@
+import axios from "axios";
+import { USER_API_ENDPOINT } from "@/utils/constants";
+import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+function Login() {
+  const [selectedOption, setSelectedOption] = useState("student");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleSubmit =async (e) => {
+    e.preventDefault();
+    // Handle login logic here
+    console.log("Form submitted:", formData, selectedOption);
+    try {
+      const res=await axios.post(`${USER_API_ENDPOINT}/${selectedOption}/login`,formData);
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Handle error (e.g., show error message to user)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}
+      className="space-y-6 max-w-md mx-auto"
+    >
+      <div className="p-5 bg-white rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Login to SCOPE</h2>
+        <div>
+          <h2>Select your Role</h2>
+          <div className="flex">
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="student"
+                checked={selectedOption === 'student'}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              />
+              Student
+            </label>
+            <br />
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="teacher"
+                checked={selectedOption === 'teacher'}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              />
+              Teacher
+            </label>
+            <br />
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="tpc"
+                checked={selectedOption === 'tpc'}
+                onChange={(e) => setSelectedOption(e.target.value)} 
+              />
+              TPC
+            </label>
+            <br />
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="tpo"
+                checked={selectedOption === 'tpo'}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              />
+              TPO
+            </label>
+          </div>
+          {/* <p>Selected: {selectedOption || 'None'}</p> */}
+        </div>
+        {/* {loginError && (
+          <div className="p-3 mb-4 bg-scope-error/10 text-scope-error rounded-md text-sm">
+            {loginError}
+          </div>
+        )} */}
+
+        <div className="space-y-4">
+          {/* Email */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              //className={`w-full p-2 border rounded-md ${errors.email ? 'border-scope-error' : 'border-gray-300'}`}
+              placeholder="example@email.com"
+            />
+            {/* {errors.email && <p className="mt-1 text-xs text-scope-error">{errors.email}</p>} */}
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              //className={`w-full p-2 border rounded-md ${errors.password ? 'border-scope-error' : 'border-gray-300'}`}
+              placeholder="Enter your password"
+            />
+            {/* {errors.password && <p className="mt-1 text-xs text-scope-error">{errors.password}</p>} */}
+          </div>
+
+          {/* <div className="flex justify-end">
+            <a href="#" className="text-sm text-scope-primary hover:underline">
+              Forgot password?
+            </a>
+          </div> */}
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center space-y-4 ">
+        <button
+          type="submit"
+          className="w-full bg-zinc-600 hover:bg-zinc-700 text-white font-medium py-2 rounded-md transition-colors"
+        >
+          Login
+        </button>
+
+        <p className="text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-scope-primary hover:underline">
+            Register here
+          </Link>
+        </p>
+      </div>
+    </form>
+  );
+}
+
+export default Login;
