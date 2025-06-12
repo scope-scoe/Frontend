@@ -1,8 +1,10 @@
 import { USER_API_ENDPOINT } from "@/utils/constants";
 import axios from "axios";
 import React, { useState } from "react";
-
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 function Register() {
+  const navigate= useNavigate();
   const [role, setRole] = useState("student");
   const [formData, setFormData] = useState({
     Name: "",
@@ -46,9 +48,13 @@ function Register() {
     console.log("Form submitted:", formData, role);
     try {
       const res=await axios.post(`${USER_API_ENDPOINT}/${role}/register`,formData);
+      if (res.data.success){
+        navigate("/login");
+        toast.success(res.data.message);
+      }
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle error (e.g., show error message to user)
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
     }
   };
   return (

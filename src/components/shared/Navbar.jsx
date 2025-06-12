@@ -5,7 +5,7 @@ function Navbar() {
   const currentUser=false
   const userRole='teacher'
   return  (
-    <header className="bg-zinc-600 sticky top-0 z-50 bg-scope-primary text-white shadow-md">
+    <header className="bg-blue-700 sticky top-0 z-50 bg-scope-primary text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="text-2xl font-bold">

@@ -3,8 +3,10 @@ import { USER_API_ENDPOINT } from "@/utils/constants";
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 function Login() {
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("student");
   const [formData, setFormData] = useState({
     email: "",
@@ -14,11 +16,20 @@ function Login() {
     e.preventDefault();
     // Handle login logic here
     console.log("Form submitted:", formData, selectedOption);
+    // getKeywords(
+    //   "Artificial Intelligence and Machine Learning are trending topics in technology."
+    //);
     try {
-      const res=await axios.post(`${USER_API_ENDPOINT}/${selectedOption}/login`,formData);
+      const res=await axios.post(`${USER_API_ENDPOINT}/${selectedOption}/login`,formData,{
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/");
+        toast.success(res.data.message);
+      }
     } catch (error) {
       console.error("Error during login:", error);
-      // Handle error (e.g., show error message to user)
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
     }
   }
 
