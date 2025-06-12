@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-//import { useAuth } from "../../contexts/AuthContext";
+import {Badge} from "../ui/Badge";
 import PageHeader from "../shared/PageHeader";
 import Card from "../shared/Card";
 
@@ -13,16 +13,7 @@ const queries = [
       "I wanted to inquire about the upcoming placement schedule for Computer Engineering students. Are there any companies visiting next month?",
     date: "2023-04-28",
     status: "Pending",
-    responses: [
-      {
-        id: 1,
-        from: "Mike TPC",
-        role: "tpc",
-        message:
-          "We have two companies scheduled to visit next month. I'll share the details soon.",
-        date: "2023-04-29",
-      },
-    ],
+    category: "Placement",
   },
   {
     id: 2,
@@ -31,7 +22,7 @@ const queries = [
       "What are the eligibility criteria for the upcoming Oracle placement drive? Do they have a CGPA cutoff?",
     date: "2023-04-25",
     status: "In Progress",
-    responses: [],
+    category: "Placement",
   },
   {
     id: 3,
@@ -40,24 +31,7 @@ const queries = [
       "Is there a specific format we should follow for our resumes for the upcoming placement season?",
     date: "2023-04-20",
     status: "Resolved",
-    responses: [
-      {
-        id: 2,
-        from: "Mike TPC",
-        role: "tpc",
-        message:
-          "Yes, we have a standard format. I'm attaching the template for your reference.",
-        date: "2023-04-21",
-      },
-      {
-        id: 3,
-        from: "Sarah TPO",
-        role: "tpo",
-        message:
-          "Please make sure to follow the attached template strictly as companies have specific requirements.",
-        date: "2023-04-22",
-      },
-    ],
+    category: "Placement",
   },
 ];
 
@@ -66,13 +40,6 @@ const Queries = () => {
   
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showNewQueryForm, setShowNewQueryForm] = useState(false);
-  const [newQuery, setNewQuery] = useState({
-    title: "",
-    description: "",
-    priority: "Medium",
-  });
-
   const filteredQueries = queries.filter((query) => {
     const matchesFilter =
       filter === "all" || filter === query.status.toLowerCase();
@@ -83,27 +50,6 @@ const Queries = () => {
 
     return matchesFilter && matchesSearch;
   });
-
-  const handleSubmitQuery = (e) => {
-    e.preventDefault();
-
-    // Validate form
-    if (!newQuery.title.trim() || !newQuery.description.trim()) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
-    // In a real app, this would send the query to the backend
-    alert("Query submitted successfully!");
-
-    // Reset form and hide it
-    setNewQuery({
-      title: "",
-      description: "",
-      priority: "Medium",
-    });
-    setShowNewQueryForm(false);
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -165,10 +111,8 @@ const Queries = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full md:w-64 p-2 border border-gray-300 rounded-md"
           />
-          <Link to={'/createQuery'}>
-            <button
-              className="bg-scope-primary text-white px-4 py-2 rounded-md hover:bg-scope-dark"
-            >
+          <Link to={"/createQuery"}>
+            <button className="bg-scope-primary text-white px-4 py-2 rounded-md hover:bg-scope-dark">
               New Query
             </button>
           </Link>
@@ -182,10 +126,10 @@ const Queries = () => {
             <Card key={query.id}>
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-semibold">{query.title}</h3>
-                  <p className="text-sm text-gray-500">
-                    Submitted on {new Date(query.date).toLocaleDateString()}
-                  </p>
+                  {/* <h3 className="text-lg font-semibold">{query.title}</h3> */}
+                  <Badge variant={"ghost"} className="mt-2 text-lg">
+                    Category : {query.category}
+                  </Badge>
                 </div>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -201,39 +145,9 @@ const Queries = () => {
               </div>
 
               <p className="mt-3">{query.description}</p>
-
-              {query.responses.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-md font-medium mb-2">Responses:</h4>
-                  <div className="space-y-3">
-                    {query.responses.map((response) => (
-                      <div
-                        key={response.id}
-                        className="bg-gray-50 p-3 rounded-md"
-                      >
-                        <div className="flex justify-between items-center mb-1">
-                          <div className="font-medium flex items-center">
-                            {response.from}
-                            <span
-                              className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-                                response.role === "tpc"
-                                  ? "bg-scope-primary/20 text-scope-primary"
-                                  : "bg-scope-secondary/20 text-scope-secondary"
-                              }`}
-                            >
-                              {response.role.toUpperCase()}
-                            </span>
-                          </div>
-                          <span className="text-xs text-gray-500">
-                            {new Date(response.date).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <p className="text-sm">{response.message}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <p className="text-sm text-gray-500">
+                Submitted on {new Date(query.date).toLocaleDateString()}
+              </p>
 
               <div className="mt-4 flex justify-end space-x-3">
                 <Link
@@ -242,12 +156,6 @@ const Queries = () => {
                 >
                   View Details
                 </Link>
-
-                {query.status !== "Resolved" && (
-                  <button className="px-4 py-2 bg-scope-primary text-white rounded-md hover:bg-scope-dark">
-                    Add Response
-                  </button>
-                )}
               </div>
             </Card>
           ))}
@@ -263,13 +171,6 @@ const Queries = () => {
                 ? "Try adjusting your search query"
                 : "You haven't submitted any queries yet"}
             </p>
-
-            <button
-              onClick={() => setShowNewQueryForm(true)}
-              className="mt-4 bg-scope-primary text-white px-4 py-2 rounded-md hover:bg-scope-dark"
-            >
-              Submit Your First Query
-            </button>
           </div>
         </Card>
       )}

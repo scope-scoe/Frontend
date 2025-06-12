@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 //import { useAuth } from "../../contexts/AuthContext";
 import Card from "../shared/Card";
 import PageHeader from "../shared/PageHeader";
+import { useSelector } from "react-redux";
 
 // Mock data
 const upcomingEvents = [
@@ -43,13 +44,13 @@ const pendingQueries = [
 
 const StudentDashboard = () => {
   //const { currentUser } = useAuth();
-  const currentUser = true;
+  const user = useSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader
-        title={`Welcome, ${currentUser?.fullName || "Student"}`}
+        title={`Welcome, ${user?.Name || "Student"}`}
         subtitle="Your student dashboard at a glance"
       />
 

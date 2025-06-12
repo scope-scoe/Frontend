@@ -81,24 +81,21 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    //if (validateForm()) {
-      // In a real app, this would call an API to create the event
       try {
-        const res= await axios.post('http://localhost:8000/api/v1/teacher/createEvent', formData,{
+        const res= await axios.post(`${USER_API_ENDPOINT}/teacher/createEvent`, formData,{
           headers: {
             "Content-Type": "multipart/form-data"},
           withCredentials: true,
         });
         if (res.data.success) {
-          //navigate("/");
+          navigate("/");
           toast.success(res.data.message);
         }
       } catch (error) {
         console.error("Error during event creation:", error);
-        //toast.error(
-        //  error.response?.data?.message || "event creation failed. Please try again."
-        //);
+        toast.error(
+          error.response?.data?.message || "event creation failed. Please try again."
+        );
       }
       console.log("Creating event with data:", formData);
       alert("Event created successfully!");

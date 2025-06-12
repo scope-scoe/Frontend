@@ -2,14 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import PageHeader from '../shared/PageHeader';
 import Card from '../shared/Card';
+import { useNavigate } from 'react-router-dom';
+import { USER_API_ENDPOINT } from '@/utils/constants';
+import axios from 'axios';
+import { toast } from 'sonner';
 function CreateQuery() {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    urgency: 'medium',
-    attachments: []
+    queryText: ''
   });
   const [errors, setErrors] = useState({});
   
@@ -24,38 +24,20 @@ function CreateQuery() {
   };
   
   
-  const validateForm = () => {
-    let tempErrors = {};
-    let isValid = true;
-    
-    if (!formData.title) {
-      tempErrors.title = 'Query title is required';
-      isValid = false;
-    }
-    
-    if (!formData.description) {
-      tempErrors.description = 'Query description is required';
-      isValid = false;
-    }
-    
-    if (!formData.category) {
-      tempErrors.category = 'Please select a category';
-      isValid = false;
-    }
-    
-    setErrors(tempErrors);
-    return isValid;
-  };
-  
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    
-    if (validateForm()) {
-      // In a real app, this would call an API to create the query
-      console.log('Creating query with data:', formData);
-      alert('Query submitted successfully!');
-      navigate('/queries');
+    try {
+      const res =await axios.post(`${USER_API_ENDPOINT}/student/createQuery`, formData, {
+        withCredentials: true,
+      });
+      console.log('Response from server:', res.data);
+      console.log("Creating query with data:", formData);
+      alert("Query submitted successfully!");
+      navigate("/queries");
+    } catch (error) {
+      console.log('Error submitting query:', error);
     }
+      
   };
   
 
@@ -73,73 +55,16 @@ function CreateQuery() {
           <div className="space-y-6">
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-700">
-                Query Title *
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                className={`w-full p-2 border rounded-md ${errors.title ? 'border-scope-error' : 'border-gray-300'}`}
-                placeholder="Enter a brief title for your query"
-              />
-              {errors.title && <p className="mt-1 text-xs text-scope-error">{errors.title}</p>}
-            </div>
-            
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                Urgency Level
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                <label className={`flex items-center justify-center p-2 border rounded cursor-pointer ${formData.urgency === 'low' ? 'border-scope-primary bg-scope-light' : 'border-gray-300'}`}>
-                  <input
-                    type="radio"
-                    name="urgency"
-                    value="low"
-                    checked={formData.urgency === 'low'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <span>Low</span>
-                </label>
-                <label className={`flex items-center justify-center p-2 border rounded cursor-pointer ${formData.urgency === 'medium' ? 'border-scope-primary bg-scope-light' : 'border-gray-300'}`}>
-                  <input
-                    type="radio"
-                    name="urgency"
-                    value="medium"
-                    checked={formData.urgency === 'medium'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <span>Medium</span>
-                </label>
-                <label className={`flex items-center justify-center p-2 border rounded cursor-pointer ${formData.urgency === 'high' ? 'border-scope-primary bg-scope-light' : 'border-gray-300'}`}>
-                  <input
-                    type="radio"
-                    name="urgency"
-                    value="high"
-                    checked={formData.urgency === 'high'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <span>High</span>
-                </label>
-              </div>
-            </div>
-            
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                Query Description *
+                Query *
               </label>
               <textarea
-                name="description"
-                value={formData.description}
+                name="queryText"
+                value={formData.queryText}
                 onChange={handleChange}
                 rows={6}
-                className={`w-full p-2 border rounded-md ${errors.description ? 'border-scope-error' : 'border-gray-300'}`}
+                className={`w-full p-2 border rounded-md ${errors.queryText ? 'border-scope-error' : 'border-gray-300'}`}
                 placeholder="Please provide detailed information about your query..."
               />
-              {errors.description && <p className="mt-1 text-xs text-scope-error">{errors.description}</p>}
             </div>
             
             <div className="flex justify-end gap-3">

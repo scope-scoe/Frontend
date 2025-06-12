@@ -2,18 +2,35 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../shared/PageHeader";
 import Card from "../shared/Card";
+import { Badge } from "../ui/badge";
+import { Ghost } from "lucide-react";
 
 // Mock data
 const events = [
   {
     id: 1,
     title: "Campus Placement Drive",
-    company: "Tech Solutions Inc.",
     description:
       "Join us for an exclusive placement opportunity with Tech Solutions Inc., a leading software development company. They are hiring for multiple positions including Software Engineer, UI/UX Designer, and Quality Analyst.",
     date: "2023-05-15",
     time: "10:00 AM",
-    eligibility: "Computer Engineering, Information Technology",
+    keywords: [
+      "placement",
+      "software",
+      "engineering",
+      "placement",
+      "software",
+      "engineering",
+      "placement",
+      "software",
+      "engineering",
+      "placement",
+      "software",
+      "engineering",
+      "placement",
+      "software",
+      "engineering",
+    ],
     location: "Seminar Hall",
     joined: true,
   },
@@ -25,6 +42,7 @@ const events = [
       "Prepare for your interviews with our comprehensive mock interview workshop. Learn techniques to tackle technical and HR round interviews effectively.",
     date: "2023-05-10",
     time: "2:00 PM",
+    keywords: ["placement", "software", "engineering"],
     eligibility: "All Departments",
     location: "Auditorium",
     joined: false,
@@ -37,6 +55,7 @@ const events = [
       "Learn how to create an effective resume that highlights your skills and experience. Get personalized feedback from industry experts.",
     date: "2023-05-08",
     time: "11:00 AM",
+    keywords: ["placement", "software", "engineering"],
     eligibility: "All Departments",
     location: "Seminar Hall 2",
     joined: true,
@@ -49,6 +68,7 @@ const events = [
       "Connect with industry leaders and gain insights into the latest trends in technology. A great opportunity for networking and learning.",
     date: "2023-05-20",
     time: "3:00 PM",
+    keywords: ["placement", "software", "engineering"],
     eligibility: "Computer Engineering, ENTC",
     location: "Online (Zoom)",
     joined: false,
@@ -161,18 +181,18 @@ const Events = () => {
                         {event.location}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">
-                          Eligible Departments:
-                        </span>{" "}
-                        {event.eligibility}
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
-
+              <div className="mt-4 flex flex-wrap gap-2">
+                {event.keywords.map((keyword, index) => (
+                  <Badge variant={Ghost}
+                    key={index}
+                  >
+                    {keyword}
+                  </Badge>
+                ))}
+              </div>
               <div className="mt-5 flex justify-end space-x-3">
                 <Link
                   to={`/events/${event.id}`}

@@ -21,7 +21,7 @@ function Register() {
   const DEPARTMENTS = [
     "Computer Engineering",
     "Information Technology",
-    "Electronics and Telecommunication Engineering",
+    "Electronics and Telecommunication",
     "Mechanical Engineering",
     "Civil Engineering",
   ];

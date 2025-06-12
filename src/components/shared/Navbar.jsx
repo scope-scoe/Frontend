@@ -1,9 +1,32 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
+import { USER_API_ENDPOINT } from '@/utils/constants';
+import { toast } from 'sonner';
+import { setCurrentUser,setUser,setUserRole } from '@/store/authSlice';
 function Navbar() {
-  const currentUser=false
-  const userRole='teacher'
+  const dispatch = useDispatch();
+  const currentUser=useSelector(store => store.auth.currentUser);
+  const userRole= useSelector(store => store.auth.userRole);
+  const navigate = useNavigate();
+  const handleLogout = async() => {
+    try {
+      const res=axios.post(`${USER_API_ENDPOINT}/${userRole}/logout`,{}, {
+        withCredentials: true,
+      });
+      console.log("Logout response:", res);
+      toast.success(`${userRole} logged out successfully!`);
+      dispatch(setCurrentUser(false));
+      dispatch(setUserRole(''));
+      dispatch(setUser(null));
+      navigate('/')
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Logout failed. Please try again.")
+    }
+  }
   return  (
     <header className="bg-blue-700 sticky top-0 z-50 bg-scope-primary text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -19,40 +42,35 @@ function Navbar() {
         {currentUser ? (
           <div className="flex items-center space-x-4">
             <nav className="hidden md:flex space-x-4">
-              <div to="/dashboard" className="hover:text-scope-accent transition-colors">
+              <Link to="/dashboard" className="hover:text-scope-accent transition-colors">
                 Dashboard
-              </div>
-              {['student', 'tpc'].includes(userRole) && (
-                <div to="/events" className="hover:text-scope-accent transition-colors">
+              </Link>
+              {['student'].includes(userRole) && (
+                <Link to="/events" className="hover:text-scope-accent transition-colors">
                   Events
-                </div>
+                </Link>
               )}
-              {['teacher', 'tpo'].includes(userRole) && (
-                <div to="/manage-events" className="hover:text-scope-accent transition-colors">
+              {['teacher'].includes(userRole) && (
+                <Link to="/manage-events" className="hover:text-scope-accent transition-colors">
                   Manage Events
-                </div>
+                </Link>
               )}
-              {['student', 'tpc'].includes(userRole) && (
-                <div to="/queries" className="hover:text-scope-accent transition-colors">
+              {['student'].includes(userRole) && (
+                <Link to="/queries" className="hover:text-scope-accent transition-colors">
                   Queries
-                </div>
+                </Link>
               )}
               {['tpc', 'tpo'].includes(userRole) && (
-                <div to="/manage-queries" className="hover:text-scope-accent transition-colors">
+                <Link to="/manage-queries" className="hover:text-scope-accent transition-colors">
                   Manage Queries
-                </div>
-              )}
-              {userRole === 'teacher' && (
-                <div to="/student-marks" className="hover:text-scope-accent transition-colors">
-                  Student Marks
-                </div>
+                </Link>
               )}
             </nav>
             <div className="flex items-center space-x-2">
-              <div to="/profile" className="hover:text-scope-accent transition-colors">
+              <Link to="/profile" className="hover:text-scope-accent transition-colors">
                 Profile
-              </div>
-              <button  
+              </Link>
+              <button  onClick={handleLogout}
                 className="bg-scope-accent/80 hover:bg-scope-accent px-3 py-1 rounded transition-colors"
               >
                 Logout

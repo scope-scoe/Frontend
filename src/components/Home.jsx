@@ -1,8 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 function Home() {
-  //const { currentUser } = useAuth();
-  const currentUser = false;
+  const currentUser = useSelector(store => store.auth.currentUser);
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
