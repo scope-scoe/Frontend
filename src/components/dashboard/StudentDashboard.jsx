@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import Card from "../shared/Card";
 import PageHeader from "../shared/PageHeader";
 import { useSelector } from "react-redux";
+import useGetAllEvents from "@/hooks/Events/useGetAllEvents";
+import useGetRegisteredEvents from "@/hooks/Events/useGetRegisteredEvents";
+import useGetCreatedQueries from "@/hooks/Queries/useGetCreatedQueries";
 
 // Mock data
 const upcomingEvents = [
@@ -43,7 +46,11 @@ const pendingQueries = [
 ];
 
 const StudentDashboard = () => {
-  //const { currentUser } = useAuth();
+  useGetCreatedQueries();
+  useGetAllEvents();
+  useGetRegisteredEvents();
+  const createdQueries=useSelector((state)=>state.query.createdQueries)
+  const registeredEvents =useSelector((state)=>state.event.registeredEvents)
   const user = useSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -61,8 +68,8 @@ const StudentDashboard = () => {
             onClick={() => setActiveTab("overview")}
             className={`py-2 px-1 border-b-2 ${
               activeTab === "overview"
-                ? "border-scope-primary text-scope-primary font-medium"
-                : "border-transparent text-gray-500 hover:text-scope-primary"
+                ? "border-blue-600 text-blue-600 font-medium"
+                : "border-transparent text-gray-500 hover:text-blue-600"
             }`}
           >
             Overview
@@ -78,27 +85,27 @@ const StudentDashboard = () => {
           <div className="grid grid-cols-2 gap-4">
             <Card className="bg-scope-light">
               <div className="text-center">
-                <div className="text-3xl font-bold text-scope-primary mb-1">
-                  3
+                <div className="text-3xl font-bold text-blue-600 mb-1">
+                  {registeredEvents.length}
                 </div>
                 <div className="text-sm text-gray-600">Upcoming Events</div>
               </div>
             </Card>
             <Card className="bg-scope-light">
               <div className="text-center">
-                <div className="text-3xl font-bold text-scope-primary mb-1">
-                  2
+                <div className="text-3xl font-bold text-blue-600 mb-1">
+                  {createdQueries.length}
                 </div>
                 <div className="text-sm text-gray-600">Active Queries</div>
               </div>
             </Card>
             <Card className="bg-scope-light md:col-span-2">
               <div className="text-center">
-                <div className="text-3xl font-bold text-scope-primary mb-1">
+                <div className="text-3xl font-bold text-blue-600 mb-1">
                   8.5
                 </div>
                 <div className="text-sm text-gray-600">CGPA</div>
-                <div className="mt-2 text-xs text-scope-primary">
+                <div className="mt-2 text-xs text-blue-600">
                   Last Updated: May 2023
                 </div>
               </div>
@@ -111,22 +118,22 @@ const StudentDashboard = () => {
               <h3 className="text-lg font-semibold">Upcoming Events</h3>
               <Link
                 to="/events"
-                className="text-sm text-scope-primary hover:underline"
+                className="text-sm text-blue-600 hover:underline"
               >
                 View All
               </Link>
             </div>
 
             <div className="divide-y">
-              {upcomingEvents.slice(0, 3).map((event) => (
+              {registeredEvents.slice(0, 3).map((event) => (
                 <div key={event.id} className="py-3">
                   <div className="flex justify-between">
                     <h4 className="font-medium">{event.title}</h4>
                     <span className="text-sm text-gray-600">
-                      {new Date(event.date).toLocaleDateString()}
+                      {event.date}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{event.company}</p>
+                  <p className="text-sm text-gray-600">{event.venue}</p>
                 </div>
               ))}
             </div>

@@ -1,5 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
+import eventSlice from "./eventSlice";
+import querySlice from "./querySlice";
 import {
   persistStore,
   persistReducer,
@@ -20,6 +22,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authSlice,
+  event: eventSlice,
+  query: querySlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -159,14 +159,14 @@ function Login() {
 
         <div className="flex flex-col items-center space-y-4 ">
           {loading ? (
-            <button className="flex items-center justify-center gap-2 bg-zinc-600 hover:bg-zinc-700 text-white font-medium py-2 rounded-md transition-colors w-full">
+            <button className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition-colors w-full">
               Please wait...
               <Loader2 className="animate-spin" />
             </button>
           ) : (
             <button
               type="submit"
-              className="w-full bg-zinc-600 hover:bg-zinc-700 text-white font-medium py-2 rounded-md transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition-colors"
             >
               Login
             </button>
@@ -174,7 +174,7 @@ function Login() {
 
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
-            <Link to="/register" className="text-scope-primary hover:underline">
+            <Link to="/register" className="text-blue-600 hover:underline">
               Register here
             </Link>
           </p>

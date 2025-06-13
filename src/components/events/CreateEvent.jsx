@@ -286,7 +286,7 @@ const CreateEvent = () => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-scope-primary hover:bg-scope-dark text-white rounded-md"
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded-md"
             >
               Create Event
             </button>

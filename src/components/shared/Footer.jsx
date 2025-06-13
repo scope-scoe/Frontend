@@ -1,7 +1,7 @@
 import React from "react";
 function Footer  ()  {
   return (
-    <div className="bg-zinc-600 text-white py-6 mt-auto">
+    <div className=" order-last w-full bg-blue-700 text-white py-6 mt-auto">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">

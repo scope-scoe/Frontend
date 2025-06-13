@@ -1,31 +1,30 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router-dom";
-import {Badge} from "../ui/Badge";
+import { Badge } from "../ui/Badge";
 import PageHeader from "../shared/PageHeader";
 import Card from "../shared/Card";
 import { useSelector } from "react-redux";
-import useGetCreatedQueries from "@/hooks/Queries/useGetCreatedQueries";
-// Mock data
+import useGetAllQueries from "../../hooks/Queries/useGetAllQueries";
+import axios from "axios";
+import { USER_API_ENDPOINT } from "@/utils/constants";
 
-
-const Queries = () => {
-  //const { userRole } = useAuth();
-  useGetCreatedQueries();
-  const queries = useSelector((state) => state.query.createdQueries);
-  console.log(queries);
+const ManageQueries = () => {
+  useGetAllQueries();
+  const queries = useSelector((state) => state.query.allQueries);
+  const userRole = useSelector((state) => state.auth.userRole);
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-    const filteredQueries = queries.filter((query) => {
-      const matchesFilter =
-        filter === "all" || filter === query.status.toLowerCase();
 
-      const matchesSearch =
-        query.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        query.queryText.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredQueries = queries.filter((query) => {
+    const matchesFilter =
+      filter === "all" || filter === query.status.toLowerCase();
 
-      return matchesFilter && matchesSearch;
-    });
-    console.log('filtered Queries:',filteredQueries);
+    const matchesSearch =
+      query.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      query.queryText.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesFilter && matchesSearch;
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -58,6 +57,16 @@ const Queries = () => {
             Pending
           </button>
           <button
+            onClick={() => setFilter("escalated")}
+            className={`px-4 py-2 rounded-md ${
+              filter === "Escalated"
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            Escalated to TPO
+          </button>
+          <button
             onClick={() => setFilter("resolved")}
             className={`px-4 py-2 rounded-md ${
               filter === "resolved"
@@ -77,11 +86,6 @@ const Queries = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full md:w-64 p-2 border border-gray-300 rounded-md"
           />
-          <Link to={"/createQuery"}>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-scope-dark">
-              New Query
-            </button>
-          </Link>
         </div>
       </div>
 
@@ -101,7 +105,7 @@ const Queries = () => {
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     query.status === "Pending"
                       ? "bg-scope-warning/20 text-scope-warning"
-                      : query.status === "In Progress"
+                      : query.status === "Escalated"
                       ? "bg-blue-600/20 text-blue-600"
                       : "bg-scope-success/20 text-scope-success"
                   }`}
@@ -121,6 +125,52 @@ const Queries = () => {
                   return `${day}-${month}-${year}`;
                 })()}
               </p>
+              <div className="mt-4 flex justify-end space-x-3">
+                {query.status === "Pending" && userRole === "tpc" && (
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await axios.post(
+                          `${USER_API_ENDPOINT}/tpc/escalateQuery`,
+                          {
+                            queryId: query._id,
+                          },
+                          { withCredentials: true }
+                        );
+                        console.log("Query escalated to TPO:", res);
+                        window.location.reload();
+                      } catch (error) {
+                        console.error("Error resolving query:", error);
+                      }
+                    }}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-scope-light"
+                  >
+                    Escalate To TPO
+                  </button>
+                )}
+                {query.status !== "Resolved" && (
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await axios.post(
+                          `${USER_API_ENDPOINT}/${userRole}/resolveQuery`,
+                          {
+                            queryId: query._id,
+                          },
+                          { withCredentials: true }
+                        );
+                        console.log("Query resolved:", res);
+                        window.location.reload();
+                      } catch (error) {
+                        console.error("Error resolving query:", error);
+                      }
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-scope-dark"
+                  >
+                    Resolve
+                  </button>
+                )}
+              </div>
             </Card>
           ))}
         </div>
@@ -142,4 +192,4 @@ const Queries = () => {
   );
 };
 
-export default Queries;
+export default ManageQueries;

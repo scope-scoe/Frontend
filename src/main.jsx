@@ -15,6 +15,7 @@ import CreateEvent from './components/events/CreateEvent.jsx'
 import ProtectedRoute from './components/shared/ProtectedRoute'
 import UnauthorizedPage from './components/shared/UnauthorizedPage'
 import Profile from './components/Profile'
+import ManageQueries from './components/query/ManageQueries'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -54,6 +55,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute allowedRoles={["student"]}>
             <Events />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='manageQueries'
+        element={
+          <ProtectedRoute allowedRoles={["tpc", "tpo"]}>
+            <ManageQueries />
           </ProtectedRoute>
         }
       />

@@ -5,6 +5,7 @@ import TeacherDashboard from './TeacherDashboard';
 import TPCDashboard from './TPCDashboard';
 import TPODashboard from './TPODashboard';
 import { useSelector } from 'react-redux';
+import ManageQueries from '../query/ManageQueries';
 
 const Dashboard = () => {
   const userRole = useSelector(store => store.auth.userRole);
@@ -16,7 +17,7 @@ const Dashboard = () => {
   } else if (userRole === 'tpc') {
     return <TPCDashboard />;
   } else if (userRole === 'tpo') {
-    return <TPODashboard />;
+    return <ManageQueries />;
   }
   
   // Fallback for unknown roles

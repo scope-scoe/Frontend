@@ -28,7 +28,7 @@ function Navbar() {
     }
   }
   return  (
-    <header className="bg-blue-700 sticky top-0 z-50 bg-scope-primary text-white shadow-md">
+    <header className="bg-blue-700 sticky top-0 z-50 bg-blue-600 text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="text-2xl font-bold">
@@ -51,8 +51,8 @@ function Navbar() {
                 </Link>
               )}
               {['teacher'].includes(userRole) && (
-                <Link to="/manage-events" className="hover:text-scope-accent transition-colors">
-                  Manage Events
+                <Link to="/createEvent" className="hover:text-scope-accent transition-colors">
+                  Create Events
                 </Link>
               )}
               {['student'].includes(userRole) && (
@@ -61,7 +61,7 @@ function Navbar() {
                 </Link>
               )}
               {['tpc', 'tpo'].includes(userRole) && (
-                <Link to="/manage-queries" className="hover:text-scope-accent transition-colors">
+                <Link to="/manageQueries" className="hover:text-scope-accent transition-colors">
                   Manage Queries
                 </Link>
               )}

@@ -6,7 +6,7 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-#141925 to-#f1f5f9 text-white bg-zinc-600 py-20">
+      <section className="bg-gradient-to-b from-blue-500 to-blue-300 text-white bg-zinc-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -23,13 +23,13 @@ function Home() {
               <div className="space-x-4">
                 <Link
                   to="/login"
-                  className="bg-white text-scope-primary hover:bg-scope-light px-6 py-3 rounded-md font-medium transition-colors"
+                  className="bg-white text-black hover:bg-blue-300 px-6 py-3 rounded-md font-medium transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-scope-accent text-white hover:bg-scope-accent/90 px-6 py-3 rounded-md font-medium transition-colors"
+                  className="bg-blue-500 text-white hover:bg-blue-500/90 px-6 py-3 rounded-md font-medium transition-colors"
                 >
                   Register
                 </Link>
@@ -37,7 +37,7 @@ function Home() {
             ) : (
               <Link
                 to="/dashboard"
-                className="bg-scope-accent text-white hover:bg-scope-accent/90 px-6 py-3 rounded-md font-medium transition-colors"
+                className="bg-blue-500 text-white hover:bg-blue-500/90 px-6 py-3 rounded-md font-medium transition-colors"
               >
                 Go to Dashboard
               </Link>
@@ -47,17 +47,17 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-scope-primary ">
+      <section className="py-16 bg- ">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="w-14 h-14 rounded-full bg-scope-light flex items-center justify-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-blue-300 flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7 text-scope-primary"
+                  className="h-7 w-7 text-"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -79,10 +79,10 @@ function Home() {
 
             {/* Feature 2 */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="w-14 h-14 rounded-full bg-scope-light flex items-center justify-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-blue-300 flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7 text-scope-primary"
+                  className="h-7 w-7 text-"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -104,10 +104,10 @@ function Home() {
 
             {/* Feature 3 */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="w-14 h-14 rounded-full bg-scope-light flex items-center justify-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-blue-300 flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7 text-scope-primary"
+                  className="h-7 w-7 text-"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -140,7 +140,7 @@ function Home() {
           <div className="flex flex-col md:flex-row gap-6 justify-between max-w-4xl mx-auto">
             {/* Step 1 */}
             <div className="flex-1 flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-scope-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+              <div className="w-12 h-12 bg- text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                 1
               </div>
               <h3 className="text-xl font-semibold mb-2">Register</h3>
@@ -152,7 +152,7 @@ function Home() {
 
             {/* Step 2 */}
             <div className="flex-1 flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-scope-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+              <div className="w-12 h-12 bg- text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                 2
               </div>
               <h3 className="text-xl font-semibold mb-2">Connect</h3>
@@ -164,7 +164,7 @@ function Home() {
 
             {/* Step 3 */}
             <div className="flex-1 flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-scope-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+              <div className="w-12 h-12 bg- text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                 3
               </div>
               <h3 className="text-xl font-semibold mb-2">Engage</h3>
@@ -178,7 +178,7 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-scope-light">
+      <section className="py-16 bg-blue-100">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
@@ -189,13 +189,13 @@ function Home() {
             <div className="space-x-4">
               <Link
                 to="/login"
-                className="bg-white text-scope-primary hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition-colors"
+                className="bg-white  hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition-colors"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-scope-primary text-white hover:bg-scope-dark px-6 py-3 rounded-md font-medium transition-colors"
+                className="bg-blue-600 text-white hover:bg-scope-dark px-6 py-3 rounded-md font-medium transition-colors"
               >
                 Register
               </Link>
@@ -203,7 +203,7 @@ function Home() {
           ) : (
             <Link
               to="/dashboard"
-              className="bg-scope-primary text-white hover:bg-scope-dark px-6 py-3 rounded-md font-medium transition-colors"
+              className="bg-blue-600 text-white hover:bg-scope-dark px-6 py-3 rounded-md font-medium transition-colors"
             >
               Go to Dashboard
             </Link>

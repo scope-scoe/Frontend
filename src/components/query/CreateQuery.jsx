@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { USER_API_ENDPOINT } from '@/utils/constants';
 import axios from 'axios';
 import { toast } from 'sonner';
+import useGetCreatedQueries from '@/hooks/Queries/useGetCreatedQueries';
 function CreateQuery() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -77,7 +78,7 @@ function CreateQuery() {
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 bg-scope-primary hover:bg-scope-dark text-white rounded-md"
+                className="px-6 py-2 bg-blue-600 hover:bg-scope-dark text-white rounded-md"
               >
                 Submit Query
               </button>

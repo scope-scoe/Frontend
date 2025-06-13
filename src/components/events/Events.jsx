@@ -1,81 +1,30 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../shared/PageHeader";
 import Card from "../shared/Card";
 import { Badge } from "../ui/badge";
 import { Ghost } from "lucide-react";
-
-// Mock data
-const events = [
-  {
-    id: 1,
-    title: "Campus Placement Drive",
-    description:
-      "Join us for an exclusive placement opportunity with Tech Solutions Inc., a leading software development company. They are hiring for multiple positions including Software Engineer, UI/UX Designer, and Quality Analyst.",
-    date: "2023-05-15",
-    time: "10:00 AM",
-    keywords: [
-      "placement",
-      "software",
-      "engineering",
-      "placement",
-      "software",
-      "engineering",
-      "placement",
-      "software",
-      "engineering",
-      "placement",
-      "software",
-      "engineering",
-      "placement",
-      "software",
-      "engineering",
-    ],
-    location: "Seminar Hall",
-    joined: true,
-  },
-  {
-    id: 2,
-    title: "Mock Interview Workshop",
-    company: "Career Development Cell",
-    description:
-      "Prepare for your interviews with our comprehensive mock interview workshop. Learn techniques to tackle technical and HR round interviews effectively.",
-    date: "2023-05-10",
-    time: "2:00 PM",
-    keywords: ["placement", "software", "engineering"],
-    eligibility: "All Departments",
-    location: "Auditorium",
-    joined: false,
-  },
-  {
-    id: 3,
-    title: "Resume Building Session",
-    company: "Career Services",
-    description:
-      "Learn how to create an effective resume that highlights your skills and experience. Get personalized feedback from industry experts.",
-    date: "2023-05-08",
-    time: "11:00 AM",
-    keywords: ["placement", "software", "engineering"],
-    eligibility: "All Departments",
-    location: "Seminar Hall 2",
-    joined: true,
-  },
-  {
-    id: 4,
-    title: "Industry Connect Webinar",
-    company: "Global Tech Partners",
-    description:
-      "Connect with industry leaders and gain insights into the latest trends in technology. A great opportunity for networking and learning.",
-    date: "2023-05-20",
-    time: "3:00 PM",
-    keywords: ["placement", "software", "engineering"],
-    eligibility: "Computer Engineering, ENTC",
-    location: "Online (Zoom)",
-    joined: false,
-  },
-];
-
+import { useSelector } from "react-redux";
+import { USER_API_ENDPOINT } from "@/utils/constants";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useGetRegisteredEvents from "@/hooks/Events/useGetRegisteredEvents";
+import useGetAllEvents from "@/hooks/Events/useGetAllEvents";
 const Events = () => {
+  useGetRegisteredEvents();
+  useGetAllEvents();
+  const navigate=useNavigate();
+  const registeredEvents = useSelector((state) => state.event.registeredEvents);
+  const allEvents = useSelector((state) => state.event.allEvents);
+  const registeredEventIds = new Set(registeredEvents.map((ev) => ev._id));
+  const events = allEvents.map((event) => ({
+    ...event,
+    joined: registeredEventIds.has(event._id),
+  }));
+    
+  console.log("Registered Events:", registeredEvents);
+  console.log("All Events:", allEvents);
+  console.log("Events:", events);
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -93,14 +42,21 @@ const Events = () => {
     return matchesFilter && matchesSearch;
   });
 
-  const handleJoinEvent = (eventId) => {
-    // In a real app, this would call an API to join the event
-    alert(`You have joined event #${eventId}`);
-  };
-
-  const handleLeaveEvent = (eventId) => {
-    // In a real app, this would call an API to leave the event
-    alert(`You have left event #${eventId}`);
+  const handleJoinEvent = async(eventId) => {
+    try {
+      const res = await axios.post(
+        `${USER_API_ENDPOINT}/student/registerForEvent`,
+        {eventId},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res);
+      window.location.reload();
+    } catch (error) {
+      console.log("Error",error)
+    }
+    
   };
 
   return (
@@ -117,7 +73,7 @@ const Events = () => {
             onClick={() => setFilter("all")}
             className={`px-4 py-2 rounded-md ${
               filter === "all"
-                ? "bg-scope-primary text-white"
+                ? "bg-blue-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -127,7 +83,7 @@ const Events = () => {
             onClick={() => setFilter("joined")}
             className={`px-4 py-2 rounded-md ${
               filter === "joined"
-                ? "bg-scope-primary text-white"
+                ? "bg-blue-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -137,7 +93,7 @@ const Events = () => {
             onClick={() => setFilter("available")}
             className={`px-4 py-2 rounded-md ${
               filter === "available"
-                ? "bg-scope-primary text-white"
+                ? "bg-blue-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -160,13 +116,13 @@ const Events = () => {
       {filteredEvents.length > 0 ? (
         <div className="space-y-6">
           {filteredEvents.map((event) => (
-            <Card key={event.id}>
+            <Card key={event._id}>
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <h3 className="text-xl font-semibold">{event.title}</h3>
-                    <div className="text-sm bg-scope-light text-scope-primary px-2 py-1 rounded">
-                      {new Date(event.date).toLocaleDateString()} @ {event.time}
+                    <div className="text-sm bg-scope-light text-blue-600 px-2 py-1 rounded">
+                      {event.date} @ {event.time}
                     </div>
                   </div>
 
@@ -178,40 +134,41 @@ const Events = () => {
                     <div>
                       <p className="text-sm text-gray-600">
                         <span className="font-medium">Location:</span>{" "}
-                        {event.location}
+                        {event.venue}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
-                {event.keywords.map((keyword, index) => (
-                  <Badge variant={Ghost}
-                    key={index}
-                  >
-                    {keyword}
-                  </Badge>
-                ))}
+                {Array.isArray(event.keywords) &&
+                typeof event.keywords[0] === "string" &&
+                event.keywords[0].startsWith("[")
+                  ? JSON.parse(event.keywords[0].replace(/'/g, '"')).map(
+                      (keyword, index) => (
+                        <Badge variant={Ghost} key={index}>
+                          {keyword}
+                        </Badge>
+                      )
+                    )
+                  : (event.keywords || []).map((keyword, index) => (
+                      <Badge variant={Ghost} key={index}>
+                        {keyword}
+                      </Badge>
+                    ))}
               </div>
               <div className="mt-5 flex justify-end space-x-3">
-                <Link
-                  to={`/events/${event.id}`}
-                  className="px-4 py-2 border border-scope-primary text-scope-primary rounded-md hover:bg-scope-light transition-colors"
-                >
-                  View Details
-                </Link>
 
                 {event.joined ? (
                   <button
-                    onClick={() => handleLeaveEvent(event.id)}
                     className="px-4 py-2 border border-scope-error text-scope-error rounded-md hover:bg-scope-error/10 transition-colors"
                   >
-                    Leave Event
+                    Joined
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleJoinEvent(event.id)}
-                    className="px-4 py-2 bg-scope-primary text-white rounded-md hover:bg-scope-dark transition-colors"
+                    onClick={() => handleJoinEvent(event._id)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-scope-dark transition-colors"
                   >
                     Join Event
                   </button>
